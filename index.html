@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guarascio vavatinni</title>
+    <script src="https://cdn-tailwindcss.vercel.app/"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+        .anton-font {
+            font-family: 'Anton', sans-serif;
+        }
+        .gallery-card {
+            transform-style: preserve-3d;
+            transition: transform 0.6s, opacity 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .flag-image {
+            object-fit: cover;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 flex items-center justify-center h-screen text-white p-4">
+
+    <div class="w-full max-w-md mx-auto">
+        <div id="gallery-container" class="gallery-card bg-white text-gray-800 rounded-xl shadow-2xl p-4 sm:p-6 text-center min-h-[480px] md:min-h-[500px]">
+            
+            <img id="gallery-image" src="" alt="Bandiera" class="flag-image w-28 min-h-28 sm:w-32 sm:h-32 rounded-full mx-auto mb-4 shadow-2xl flex-shrink-0">
+            
+            <div class="flex-grow flex items-center flex-col justify-center">
+                <h1 class="text-3xl sm:text-4xl font-bold text-red-600 flex-shrink-0 my-2">Guarascio</h1>
+                <p id="translation-text" class="anton-font text-5xl sm:text-6xl md:text-7xl text-blue-700 break-words leading-tight"></p>
+            </div>
+
+            <p id="language-text" class="text-base sm:text-lg text-gray-500 mt-2 flex-shrink-0"></p>
+        </div>
+
+        <div id="gallery-nav" class="flex items-center justify-center gap-4 sm:gap-6 mt-4 sm:mt-6">
+            <button id="prev-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold p-4 rounded-full transition-transform transform hover:scale-110 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+            <button id="share-btn" title="Condividi come immagine" class="bg-green-500 hover:bg-green-600 text-white font-bold p-4 rounded-full transition-all transform hover:scale-110 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12s-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6.001l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.317a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                </svg>
+            </button>
+            <button id="next-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold p-4 rounded-full transition-transform transform hover:scale-110 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const translations = [
+            { language: 'Arbëresh', translation: 'Ikë / Shko', code: 'al' },
+            { language: 'Barese', translation: 'Vattìn', code: null },
+            { language: 'Calabrese', translation: 'Vattìndi', code: null },
+            { language: 'Friulano', translation: 'Và vie', code: null },
+            { language: 'Ligure (Genovese)', translation: 'Anàtene via', code: null },
+            { language: 'Milanese', translation: 'Va via', code: null },
+            { language: 'Napoletano', translation: 'Vattenne', code: null },
+            { language: 'Piemontese', translation: 'Vantne via', code: null },
+            { language: 'Romanesco', translation: 'Anvàttene', code: null },
+            { language: 'Sardo (Logudorese)', translation: 'Bànnadi', code: null },
+            { language: 'Siciliano', translation: 'Vattìnni', code: null },
+            { language: 'Veneto', translation: 'Vate via', code: null },
+            { language: 'Basco', translation: 'Alde hemendik', code: null },
+            { language: 'Corso', translation: 'Vattinni', code: null },
+            { language: 'Curdo', translation: 'Here derê', code: null },
+            { language: 'Esperanto', translation: 'Foriru', code: null },
+            { language: 'Latino', translation: 'Abi', code: null },
+            { language: 'Afrikaans', translation: 'Gaan weg', code: 'za' },
+            { language: 'Albanese', translation: 'Ik', code: 'al' },
+            { language: 'Amarico', translation: 'ሂድ', code: 'et' },
+            { language: 'Arabo', translation: 'اذهب', code: 'sa' },
+            { language: 'Armeno', translation: 'Հեռացիր', code: 'am' },
+            { language: 'Azero', translation: 'Çıx get', code: 'az' },
+            { language: 'Bengalese', translation: 'চলে যাও', code: 'bd' },
+            { language: 'Bielorusso', translation: 'Ідзі адсюль', code: 'by' },
+            { language: 'Birmano', translation: 'သွား', code: 'mm' },
+            { language: 'Bosniaco', translation: 'Odlazi', code: 'ba' },
+            { language: 'Bulgaro', translation: 'Махай се', code: 'bg' },
+            { language: 'Cambogiano (Khmer)', translation: 'ចេញទៅ', code: 'kh' },
+            { language: 'Catalano', translation: 'Ves-te\'n', code: 'es-ct' },
+            { language: 'Ceco', translation: 'Jdi pryč', code: 'cz' },
+            { language: 'Chirghiso', translation: 'Кет', code: 'kg' },
+            { language: 'Cinese (Mandarino)', translation: '走开', code: 'cn' },
+            { language: 'Coreano', translation: '가버려', code: 'kr' },
+            { language: 'Creolo Haitiano', translation: 'Ale', code: 'ht' },
+            { language: 'Croato', translation: 'Odlazi', code: 'hr' },
+            { language: 'Danese', translation: 'Gå væk', code: 'dk' },
+            { language: 'Ebraico', translation: 'לך מפה', code: 'il' },
+            { language: 'Estone', translation: 'Mine ära', code: 'ee' },
+            { language: 'Filippino', translation: 'Umalis ka', code: 'ph' },
+            { language: 'Finlandese', translation: 'Mene pois', code: 'fi' },
+            { language: 'Francese', translation: 'Va-t\'en', code: 'fr' },
+            { language: 'Frisone', translation: 'Gean fuort', code: 'nl' },
+            { language: 'Gaelico Scozzese', translation: 'Falbh', code: 'gb-sct' },
+            { language: 'Galiziano', translation: 'Marcha de aquí', code: 'es-ga' },
+            { language: 'Gallese', translation: 'Dos i ffwrdd', code: 'gb-wls' },
+            { language: 'Georgiano', translation: 'წადი', code: 'ge' },
+            { language: 'Giapponese', translation: '出ていけ', code: 'jp' },
+            { language: 'Giavanese', translation: 'Lunga', code: 'id' },
+            { language: 'Greco', translation: 'Φύγε', code: 'gr' },
+            { language: 'Gujarati', translation: 'ચાલ્યા જાઓ', code: 'in' },
+            { language: 'Hausa', translation: 'Tafi', code: 'ng' },
+            { language: 'Hawaiano', translation: 'Hele aku', code: 'us' },
+            { language: 'Hindi', translation: 'चले जाओ', code: 'in' },
+            { language: 'Igbo', translation: 'Pụọ', code: 'ng' },
+            { language: 'Indonesiano', translation: 'Pergi', code: 'id' },
+            { language: 'Inglese', translation: 'Go away', code: 'gb' },
+            { language: 'Irlandese', translation: 'Imigh leat', code: 'ie' },
+            { language: 'Islandese', translation: 'Farðu', code: 'is' },
+            { language: 'Kannada', translation: 'ಹೊರಟು ಹೋಗು', code: 'in' },
+            { language: 'Kazako', translation: 'Кет', code: 'kz' },
+            { language: 'Lao', translation: 'ອອກໄປ', code: 'la' },
+            { language: 'Lettone', translation: 'Ej nost', code: 'lv' },
+            { language: 'Lituano', translation: 'Eik šalin', code: 'lt' },
+            { language: 'Lussemburghese', translation: 'Géi fort', code: 'lu' },
+            { language: 'Macedone', translation: 'Оди си', code: 'mk' },
+            { language: 'Malgascio', translation: 'Mandehana', code: 'mg' },
+            { language: 'Malayalam', translation: 'പോകുക', code: 'in' },
+            { language: 'Maltese', translation: 'Mur \'l hemm', code: 'mt' },
+            { language: 'Maori', translation: 'Haere atu', code: 'nz' },
+            { language: 'Marathi', translation: 'चालते व्हा', code: 'in' },
+            { language: 'Mongolo', translation: 'Зайл', code: 'mn' },
+            { language: 'Nepalese', translation: 'जाऊ', code: 'np' },
+            { language: 'Norvegese', translation: 'Gå vekk', code: 'no' },
+            { language: 'Olandese', translation: 'Ga weg', code: 'nl' },
+            { language: 'Pashto', translation: 'ځه لاړ شه', code: 'af' },
+            { language: 'Persiano', translation: 'برو گمشو', code: 'ir' },
+            { language: 'Polacco', translation: 'Idź stąd', code: 'pl' },
+            { language: 'Portoghese', translation: 'Vai-te embora', code: 'pt' },
+            { language: 'Punjabi', translation: 'ਦਫਾ ਹੋ ਜਾਓ', code: 'in' },
+            { language: 'Rumeno', translation: 'Pleacă', code: 'ro' },
+            { language: 'Russo', translation: 'Уходи', code: 'ru' },
+            { language: 'Samoano', translation: 'Alu \'ese', code: 'ws' },
+            { language: 'Serbo', translation: 'Одлази', code: 'rs' },
+            { language: 'Sesotho', translation: 'Tsamaea', code: 'ls' },
+            { language: 'Shona', translation: 'Enda', code: 'zw' },
+            { language: 'Sindhi', translation: 'هليو وڃ', code: 'pk' },
+            { language: 'Singalese', translation: 'යන්න යන්න', code: 'lk' },
+            { language: 'Slovacco', translation: 'Choď preč', code: 'sk' },
+            { language: 'Sloveno', translation: 'Pojdi stran', code: 'si' },
+            { language: 'Somalo', translation: 'Iska tag', code: 'so' },
+            { language: 'Spagnolo', translation: 'Vete', code: 'es' },
+            { language: 'Sundanese', translation: 'Indit', code: 'id' },
+            { language: 'Svedese', translation: 'Gå härifrån', code: 'se' },
+            { language: 'Swahili', translation: 'Nenda zako', code: 'tz' },
+            { language: 'Tagico', translation: 'Бирав', code: 'tj' },
+            { language: 'Tailandese', translation: 'ไปให้พ้น', code: 'th' },
+            { language: 'Tamil', translation: 'போ', code: 'in' },
+            { language: 'Tedesco', translation: 'Hau ab', code: 'de' },
+            { language: 'Telugu', translation: 'వెళ్ళిపో', code: 'in' },
+            { language: 'Turco', translation: 'Git buradan', code: 'tr' },
+            { language: 'Ucraino', translation: 'Йди геть', code: 'ua' },
+            { language: 'Ungherese', translation: 'Menj el', code: 'hu' },
+            { language: 'Urdu', translation: 'چلے جاؤ', code: 'pk' },
+            { language: 'Uzbeko', translation: 'Ket', code: 'uz' },
+            { language: 'Vietnamita', translation: 'Đi đi', code: 'vn' },
+            { language: 'Xhosa', translation: 'Hamba', code: 'za' },
+            { language: 'Yiddish', translation: 'גיי אוועק', code: null },
+            { language: 'Yoruba', translation: 'Lọ kúrò', code: 'ng' },
+            { language: 'Zulu', translation: 'Hamba', code: 'za' }
+        ];
+
+        let currentIndex = 0;
+
+        const galleryContainer = document.getElementById('gallery-container');
+        const galleryImage = document.getElementById('gallery-image');
+        const translationText = document.getElementById('translation-text');
+        const languageText = document.getElementById('language-text');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const shareBtn = document.getElementById('share-btn');
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function getFlagUrl(code) {
+            return `https://flagcdn.com/w160/${code}.png`;
+        }
+
+        function updateGallery(direction) {
+            const current = translations[currentIndex];
+            
+            galleryContainer.style.transform = `translateX(${direction * 100}px) rotateY(${direction * 15}deg)`;
+            galleryContainer.style.opacity = '0';
+            
+            setTimeout(() => {
+                if (current.code) {
+                    galleryImage.style.opacity = '1';
+                    galleryImage.style.display = 'block';
+                    galleryImage.src = getFlagUrl(current.code);
+                } else {
+                    galleryImage.style.opacity = '0';
+                }
+
+                translationText.textContent = current.translation;
+                languageText.textContent = `in ${current.language}`;
+                
+                galleryContainer.style.transform = 'translateX(0) rotateY(0deg)';
+                galleryContainer.style.opacity = '1';
+            }, 200);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            shuffleArray(translations);
+            currentIndex = Math.floor(Math.random() * translations.length);
+            updateGallery(0);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % translations.length;
+            updateGallery(1);
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + translations.length) % translations.length;
+            updateGallery(-1);
+        });
+
+        function downloadCanvas(canvas, filename) {
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            link.remove();
+        }
+
+        shareBtn.addEventListener('click', async () => {
+            // Fornisce un feedback visivo disabilitando il pulsante
+            shareBtn.disabled = true;
+            shareBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
+            shareBtn.classList.add('bg-gray-500', 'cursor-wait');
+            
+            try {
+                const elementToCapture = document.getElementById('gallery-container');
+                const canvas = await html2canvas(elementToCapture, {
+                    useCORS: true, // Necessario per caricare le bandiere da un altro dominio
+                    backgroundColor: '#ffffff', // Assicura che lo sfondo della card sia bianco
+                    scale: 2 // Aumenta la risoluzione per una qualità migliore
+                });
+
+                const current = translations[currentIndex];
+                const shareText = `Guarascio, te lo dico in ${current.language}: ${current.translation}`;
+                const shareTitle = 'Vattene Guarascio';
+                const fileName = 'guarascio-vavatinni.png';
+
+                // Prova a condividere l'immagine usando la Web Share API (per mobile)
+                if (navigator.share && typeof canvas.toBlob === 'function') {
+                    canvas.toBlob(async (blob) => {
+                        const file = new File([blob], fileName, { type: 'image/png' });
+                        const shareData = { files: [file], title: shareTitle, text: shareText };
+
+                        if (navigator.canShare && navigator.canShare(shareData)) {
+                            try {
+                                await navigator.share(shareData);
+                            } catch (error) {
+                                // Se l'utente annulla, non fare nulla. Altrimenti, scarica l'immagine.
+                                if (error.name !== 'AbortError') {
+                                    console.warn('Condivisione fallita, avvio il download di fallback:', error);
+                                    downloadCanvas(canvas, fileName);
+                                }
+                            }
+                        } else {
+                            // Se non può condividere file, scarica l'immagine
+                            downloadCanvas(canvas, fileName);
+                        }
+                    }, 'image/png');
+                } else {
+                    // Fallback per browser senza Web Share API (es. desktop): scarica l'immagine
+                    downloadCanvas(canvas, fileName);
+                }
+            } catch (error) {
+                console.error("Errore durante la creazione dell'immagine:", error);
+                alert("Impossibile creare l'immagine. Prova a ricaricare la pagina.");
+            } finally {
+                // Ripristina il pulsante in ogni caso
+                shareBtn.disabled = false;
+                shareBtn.classList.add('bg-green-500', 'hover:bg-green-600');
+                shareBtn.classList.remove('bg-gray-500', 'cursor-wait');
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                nextBtn.click();
+            } else if (e.key === 'ArrowLeft') {
+                prevBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>
